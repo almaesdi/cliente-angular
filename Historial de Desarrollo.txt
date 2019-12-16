@@ -1,0 +1,119 @@
+Requisitos Angular:
+
+
+npm install --save rxjs-compat
+
+---------------------------
+Dependencias del proyecto:
+
+Usaremos BOOTSTRAP y por ende JQUERY. Para instalarlos vamos a modificar el archivo package.json y agregar las librerias en la array dependencies:
+  "bootstrap": "4.4.1",
+  "jquery": "3.4.1"
+
+Luego, para instalarlas hay que ejecutar el siguiente comando en la consola:
+  npm update
+
+*Las librerias quedaran instaladas en le directorio node_modules
+
+Una vez instaladas, tenemos que importarlas al proyecto, para eso modificaremos el archivo angular.json:
+
+Dentro de array del proyecto agregar lo siguiente a "styles":
+  "node_modules/bootstrap/dist/css/bootstrap.min.css"
+
+Dentro de array del proyecto agregar lo siguiente a "scripts":
+  "node_modules/jquery/dist/jquery.min.js",
+  "node_modules/bootstrap/dist/js/bootstrap.min.js"
+
+--------------------------
+Modelos
+
+Crearemos los mismos modelos con los mismos atributos que tenemos en la API de laravel.
+Crearemos la carpeta "Models" dentro de "src/app".
+
+Crearemos los modelos user.ts y car.ts (Extension TS)
+
+*la clase parte con la palabra "export", con eso, la clase puede ser utilizada fuera del archivo mismo, osea, usada por el proyecto.
+--------------------------
+
+Cuerpo base de la web
+
+Modificaremos el componente principal de la aplicacion que viene por defecto.
+Borraremos todo el contenido del archivo "app.component.html" y haremos el esqueleto de la web, como su cabecera.
+
+---------------------------
+Primeros Components
+
+Haremos 2 componentes, uno para el login y el otro para el registro
+Crearemos la carpeta "components" en "src/app" y a su vez crearemos una carpeta por cada componente dentro de esta nueva carpeta.
+Por lo que crearemos la carpeta "login" y "register" dentro de "src/app/components"
+
+* OnInit: Significa que tendra un metodo que se ejecutara al cargar el componente.
+
+Recordar que una vez creado el componente se debe agregar en el archivo "app.module.ts":
+
+-------------------------------------
+Configurando el Router
+
+Para configurar nuestro routing, crearemos un archivo llamado "app.routing.ts" dentro de nuestra carpeta "src/app"
+
+En las routas debemos importar los componentes que vamos a routear al igual que lo hacemos cuando importamos en app.module.ts
+
+Haremos un arreglo del tipo Routes, el cual seran Json que asociará ruta y componente.
+
+Finalmente importaremos el app.routing.ts en app.module.ts para que sea reconocido por el framework, ademas
+agregaremos el "routing" en el "imports" y el appRoutingProviders dentro de "providers"
+
+Para que en la pagina web se vea reflejado, se debe usar la etiqueta <router-outlet>, el cual, dependiendo del la ruta, cargara
+el componente asociado.
+
+
+----------------------------------------
+Formulario (registro)
+
+*Para usar formularios en Angular, se debe importar su modulo en app-module.ts, por lo que pondremos la libreria en los import y
+lo añadiremos al array de imports
+import { FormsModule } from '@angular/forms'
+
+En el componente del register importaremos el modelo User y crearemos una variable del modelo User para almacenar la informacion estructuradamente.
+Ademas crearemos el metodo que enviará los datos a la api, se llamara onSubmit(), nombre es opcional, pero simbolico
+
+En el html de register crearemos un formulario
+
+
+-----------------------------------------
+Servicios
+
+Angular guardara enviara la informacion a la API a traves de un servicio.
+Crearemos la carpeta Services en "src/app".
+
+Como vamos a usar cliente HTTP para el consumo de api, primero agregaremos el modulo HttpClient
+en el archivo "app.module.ts"
+
+Se debe instalar la siguiente dependencia para poder procesar las respuestas del servidor
+npm install --save rxjs-compat
+
+Definiremos varios archivos:
+
+  - global.ts : El cual sera nuestro archivo de configuraciones, tendra las variables como URL de nuestra API
+  - user.service.ts : Servicios para la clase Usuario
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
+Tips
+
+Route:
+-Como angular es para hacer SPA (sin refrescar la pagina) cuando usemos el <a> en vez de usar href (cambio de pagina) debemos usar <a [routerLink]="['login']">Login</a>,
+esto hará que se cambie la url sin refrescar la pagina y cargara solo los componentes de login
+
+Form Y bindeo:
+- Angular maneja sus propias ID por etiqueta, en vez de usar id="unaId" usaremos #unaId , con ello angular podra reconocerlo como variable
+- Si queremos bindear un input de la vista con una variable del componente entonces usaremos [ngModel]="nombreVarComponente" (unidireccion: Modelo pasa valor a la vista y no viceversa)
+  o [(ngModel)]="nombreVarComponente" (bidireccion: Modelo pasa valor a la vista y la vista se lo pasa al modelo)
+- Si queremos hacer validaciones de Form, debemos usar en el <form #registerForm="ngForm"> luego, a cada input debemos asignarle un id  on ngModel ejemplo: <input type="text" #surname="ngModel">
+  con ello podemos hacer validaciones como surname.valid o surname.touched()
+- Podemos cambiar el default del envio del form agregando el eventos (ngSubmit)="funcionComponenteAllamar()" dentro de la etiqueta <form>
