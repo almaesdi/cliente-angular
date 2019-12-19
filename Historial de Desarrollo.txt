@@ -66,20 +66,6 @@ agregaremos el "routing" en el "imports" y el appRoutingProviders dentro de "pro
 Para que en la pagina web se vea reflejado, se debe usar la etiqueta <router-outlet>, el cual, dependiendo del la ruta, cargara
 el componente asociado.
 
-
-----------------------------------------
-Formulario (registro)
-
-*Para usar formularios en Angular, se debe importar su modulo en app-module.ts, por lo que pondremos la libreria en los import y
-lo añadiremos al array de imports
-import { FormsModule } from '@angular/forms'
-
-En el componente del register importaremos el modelo User y crearemos una variable del modelo User para almacenar la informacion estructuradamente.
-Ademas crearemos el metodo que enviará los datos a la api, se llamara onSubmit(), nombre es opcional, pero simbolico
-
-En el html de register crearemos un formulario
-
-
 -----------------------------------------
 Servicios
 
@@ -97,10 +83,33 @@ Definiremos varios archivos:
   - global.ts : El cual sera nuestro archivo de configuraciones, tendra las variables como URL de nuestra API
   - user.service.ts : Servicios para la clase Usuario
 
+----------------------------------------
+Formulario/registro (Primer call a la api)
+
+*Para usar formularios en Angular, se debe importar su modulo en app-module.ts, por lo que pondremos la libreria en los import y
+lo añadiremos al array de imports
+import { FormsModule } from '@angular/forms'
+
+En el componente del register importaremos el modelo User y crearemos una variable del modelo User para almacenar la informacion estructuradamente.
+Ademas crearemos el metodo que enviará los datos a la api, se llamara onSubmit(), nombre es opcional, pero simbolico
+
+Para registrar al usuario crearemos dentro del servicio user.service.ts la funcion que hará el llamado a la API enviando el user en un json.
 
 
+----------------------------------------
+Formulario/Login (Token y persistencia de session)
 
+Para el login del usuario crearemos una funcion para el login que tendra 2 respuestas diferentes segun se mande o no el segundo parametro opcional
 
+Si se envía solo el User, la api respondera con el Token de autentificacion. En cambio si se envia el user y el getToken, responderemos los datos
+basicos del usuario.
+
+Para la persistencia de session usaremos el "Local Storage" del navegador del cliente para que guarde temporalmente su token e identidad. Por lo
+que agregaremos esas 2 variables al componente de login y las guardaremos con localStorage.setItem();
+*Local Storage solo guarda string y numeros, no guarda objetos JSON, por lo que se debe hacer uso de JSON.stringify
+
+Definiremos las logicas de obtencion de Token e Identity en nuestro user.service, por lo que crearemos 2 metodos que nos retornaran la informacion
+de las variables o si estan vacias.
 
 
 ------------------------------------------------------------------------------

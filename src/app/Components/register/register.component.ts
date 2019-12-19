@@ -14,6 +14,7 @@ import { UserService } from '../../Services/user.service';
 export class RegisterComponent implements OnInit{
   public title: string;
   public user: User;
+  public status: string;
 
   constructor(
     private _userService: UserService,
@@ -28,8 +29,30 @@ export class RegisterComponent implements OnInit{
     console.log('Registrate.component cargado correctamente');
   }
 
-  onSubmit(){
-    console.log(this._userService.pruebas());
+  //Recibo el form solo para resetearlo en caso de exito
+  onSubmit(form){
+
+    //Como la respuesta es Observable podemos usar los metodos Subscribe y procesar respuesta y error
+    this._userService.register(this.user).subscribe(
+      response => {
+        if(response.status == 'Success'){
+          this.status = response.status;
+
+          //reseteo el user
+          this.user = new User(1, 'ROLE_USER','','','','');
+          //vacio formulario
+          form.reset();
+
+        }else{
+          this.status = 'error';
+        }
+      },
+      error => {
+        console.log(<any>error);
+      }
+    );
   }
+
+
 
 }

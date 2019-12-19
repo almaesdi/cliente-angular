@@ -13,6 +13,11 @@ import { User } from '../models/user';
 export class UserService {
   public url: string;
 
+  //Variables LocalStorage
+  public identity;
+  public token;
+
+
   constructor(public _http:HttpClient){
     this.url = GLOBAL.url;
   }
@@ -20,4 +25,57 @@ export class UserService {
   pruebas(){
     return "HOLA MUNDO";
   }
+
+  //Observable<any> indica que el retorno sera un observable
+  register(user): Observable<any>{
+    let json = JSON.stringify(user);
+
+    let params = 'json='+json;
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+
+    return this._http.post(this.url+'register',params,{headers:headers});
+  }
+
+  //Observable<any> indica que el retorno sera un observable
+  //gettoken es opcional, en caso de omision es NuLL
+  signup(user, gettoken = null): Observable<any>{
+
+    //Si tenemos gettoken, se lo agregamos al user
+    if(gettoken != null){
+      user.gettoken = 'true';
+    }
+
+    let json = JSON.stringify(user);
+
+    let params = 'json='+json;
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+
+    return this._http.post(this.url+'login',params,{headers:headers});
+  }
+
+  /**METODOS PARA EXTRACCTION DESDE LOCAL STORAGE **/
+  getIdentity(){
+    let identity = JSON.parse(localStorage.getItem('identity'));
+
+    if(identity != "undefined"){
+      this.identity = identity;
+    }else{
+      this.identity = null;
+    }
+
+    return this.identity;
+  }
+
+  getToken(){
+    let token = JSON.parse(localStorage.getItem('token'));
+
+    if(token != "undefined"){
+      this.token = token;
+    }else{
+      this.token = null;
+    }
+
+    return this.token;
+  }
+
 }
