@@ -1,0 +1,33 @@
+<div class="col-md-12" *ngIf="cars">
+  <h2>{{title}}</h2>
+
+  <table class="table table-hover table-striped" id="cars-list">
+    <tr>
+      <th>Vehiculo</th>
+      <th>Precio</th>
+      <th>Disponible</th>
+      <th>Acciones</th>
+    </tr>
+    <tr *ngFor="let car of cars">
+      <td>
+        <a [routerLink]="['vehiculo',car.id]">{{car.title}}</a>
+      </td>
+      <td>
+        {{car.price}}
+      </td>
+      <td>
+        <span *ngIf="car.status == 'true'">
+          Si
+        </span>
+        <span *ngIf="car.status == 'false'">
+          No
+        </span>
+      </td>
+      <td>
+        <a [routerLink]="['editar-vehiculo',car.id]" class="btn btn-warning">Editar</a>
+        <a (click)="deleteCar(car.id)" class="btn btn-danger">Borrar</a>
+      </td>
+    </tr>
+  </table>
+
+</div>

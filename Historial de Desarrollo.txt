@@ -109,15 +109,70 @@ que agregaremos esas 2 variables al componente de login y las guardaremos con lo
 *Local Storage solo guarda string y numeros, no guarda objetos JSON, por lo que se debe hacer uso de JSON.stringify
 
 Definiremos las logicas de obtencion de Token e Identity en nuestro user.service, por lo que crearemos 2 metodos que nos retornaran la informacion
-de las variables o si estan vacias.
+de las variables.
+*Las variables seran seteadas aunque fallé el login, ya que la api retorna informacion si o si, por lo que hay q agregar validaciones extras
 
+------------------------------------------
+Gracias a que seteamos el localStorage y logramos persistir el login, modificaremos el header para que muestre el nombre de usuario si es que esta
+logueado.
+
+Por lo que modificaremos el app.components.ts, agregaremos el servicio y definimos las variables
+
+-------------------------------------------
+Cerrar Session (Logout)
+
+Se crea el componente, ruta y redireccion
+
+--------------------------------------------
+Actualizacion automatica de componentes
+
+Existe una funcion en los componentes que se ejecutará cada vez que exista un cambio en la aplicacion.
+Por lo que podemos usarla para resetear nuevos valores en las variables y por ende que se vuelvan a cumplir las condiciones en la vista.
+
+La funcion se llama ngDoCheck() y para ser usada, al igual que ngOnInit, debe ser importada.
+
+
+-----------------------------------------------
+Componentes para el CRUD de vehiculos
+
+Crearemos el CRUD para los vehiculos, para ello necesitaremos un componente (y formulario) para cada operacion, por lo que ejecutaremos los siguientes
+comandos de angular CLI para generalos mas facil.
+
+ng g component Components/CarNew
+ng g component Components/CarEdit
+ng g component Components/CarDetail
+
+Esto generara un componente, un achivo html, un css, un componente adicional para pruebas y agregará el componente recien creado al archivo app.module.ts
+
+Solo nos faltaria agregar las rutas correspondientes a nuestro archivo app.routing.ts. Recordar hacer los import por cada componente.
+
+Haremos un CarService para manejar las llamadas a api
+
+--------------------------------------------------
+Editar Vehiculo (reciclado de vista)
+
+Dado que el formulario de edicion tiene los mismo campos de registro, vamos a reciclar el mismo formulario (o html) pero sin copiarlo.
+En el component de edit vamos a llamar al mismo HTML del crear vehiculo.
+Esto funciona dado que los atributos del vehiculo (car) estan bindeados al formulario, por lo que al recuperar un vehiculo del webservice
+ya tendra los atributos seteados, por ende, los input del formulario estaran completados.
+Podemos sobreescribir variables como el titulo de la pagina.
 
 ------------------------------------------------------------------------------
 Tips
 
+Angular CLI:
+- Generar un componente mediante el comando:
+    ng g component Components/CarNew
+      - ng: es para especificar que sera un comando node
+      - g: es de generate
+      - componente: es el objeto que generaremos
+      - Components/CarNew: es la ruta y el nombre los archivos (usando camel case, osea Mayuscula por palabra)
+    Esto nos generara el componente (con codigo base),un html, un archivo css, otro componente para pruebas y finalmente agregará el componente recien creado
+    al archivo app.module.ts
+
 Route:
--Como angular es para hacer SPA (sin refrescar la pagina) cuando usemos el <a> en vez de usar href (cambio de pagina) debemos usar <a [routerLink]="['login']">Login</a>,
-esto hará que se cambie la url sin refrescar la pagina y cargara solo los componentes de login
+- Como angular es para hacer SPA (sin refrescar la pagina) cuando usemos el <a> en vez de usar href (cambio de pagina) debemos usar <a [routerLink]="['login']">Login</a>,
+  esto hará que se cambie la url sin refrescar la pagina y cargara solo los componentes de login
 
 Form Y bindeo:
 - Angular maneja sus propias ID por etiqueta, en vez de usar id="unaId" usaremos #unaId , con ello angular podra reconocerlo como variable
@@ -126,3 +181,10 @@ Form Y bindeo:
 - Si queremos hacer validaciones de Form, debemos usar en el <form #registerForm="ngForm"> luego, a cada input debemos asignarle un id  on ngModel ejemplo: <input type="text" #surname="ngModel">
   con ello podemos hacer validaciones como surname.valid o surname.touched()
 - Podemos cambiar el default del envio del form agregando el eventos (ngSubmit)="funcionComponenteAllamar()" dentro de la etiqueta <form>
+
+
+Errores Personales (Principiante):
+- No definir (o tener ojo) un mismo nombre de variable de componente con un atributo de un objeto, ya que se puede producir error al registrar variables en un formulario.
+  Por ejemplo, en el componente se creo la variable "status" que era para guardar el status de la peticion del servicio, y a la vez, el objeto Car tiene un atributo llamado "status". Esto causa un problema
+  porque cuando definimos un formulario y sus id angular, por convencion, usamos el mismo nombre del atributo del objeto, en esta caso lo llamariamos #status. Entonces tenemos una doble declaracion con el mismo
+  nombre de variable.

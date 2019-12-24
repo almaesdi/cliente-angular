@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 //Modulo con variables globales
 import { GLOBAL } from './global';
 //Modelo User
-import { User } from '../models/user';
+import { User } from '../Models/user';
 
 @Injectable()
 export class UserService {
@@ -18,12 +18,10 @@ export class UserService {
   public token;
 
 
-  constructor(public _http:HttpClient){
+  constructor(
+    public _http:HttpClient
+    ){
     this.url = GLOBAL.url;
-  }
-
-  pruebas(){
-    return "HOLA MUNDO";
   }
 
   //Observable<any> indica que el retorno sera un observable
@@ -67,7 +65,7 @@ export class UserService {
   }
 
   getToken(){
-    let token = JSON.parse(localStorage.getItem('token'));
+    let token = localStorage.getItem('token');
 
     if(token != "undefined"){
       this.token = token;
@@ -76,6 +74,11 @@ export class UserService {
     }
 
     return this.token;
+  }
+
+  logout(){
+    localStorage.removeItem('identity');
+    localStorage.removeItem('token');
   }
 
 }
